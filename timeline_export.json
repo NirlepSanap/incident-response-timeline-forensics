@@ -1,0 +1,1534 @@
+{
+  "case_id": "IR-2026-001",
+  "case_details": {
+    "case_id": "IR-2026-001",
+    "incident_type": "Suspected Data Exfiltration",
+    "organization": "Acme Corporation",
+    "investigator": "Digital Forensics Team",
+    "executive_summary": "\nA potential data breach was detected on February 9, 2026, involving unauthorized \naccess to workstation WORKSTATION-01. The incident appears to involve external \nthreat actor gaining remote access, escalating privileges, and exfiltrating \nsensitive data through both network channels and removable media.\n\nThis automated forensic analysis correlates evidence from Windows Event Logs, \nnetwork traffic captures, and USB device activity to reconstruct the attack \ntimeline and identify the scope of compromise.\n        ",
+    "conclusions": "\nCONCLUSIONS AND FINDINGS:\n------------------------\n\nThe forensic timeline analysis reveals a coordinated attack with the following \nkey observations:\n\n1. INITIAL ACCESS: External RDP connection from IP 198.51.100.89 to internal \n   workstation at approximately [TIME]. The connection was successful using \n   credentials for account \"attacker@external.com\".\n\n2. PRIVILEGE ESCALATION: Within 5 minutes of initial access, the attacker \n   obtained elevated privileges (Event ID 4672), indicating either credential \n   theft or exploitation of a privilege escalation vulnerability.\n\n3. PERSISTENCE MECHANISM: A scheduled task was created (Event ID 4698) to \n   maintain persistent access to the compromised system.\n\n4. DATA EXFILTRATION - NETWORK: Multiple large data transfers (2-5 MB each) \n   were observed to external IP 203.0.113.45 over HTTPS (port 443), totaling \n   approximately 15-20 MB of data.\n\n5. DATA EXFILTRATION - REMOVABLE MEDIA: A Kingston DataTraveler USB device \n   was connected and used for data transfer approximately 35 minutes after \n   initial access, representing an additional exfiltration vector.\n\nRECOMMENDATIONS:\n---------------\n\nIMMEDIATE ACTIONS:\n\u2022 Isolate WORKSTATION-01 from the network immediately\n\u2022 Disable remote access for account \"attacker@external.com\"\n\u2022 Block external IP addresses 198.51.100.89 and 203.0.113.45 at firewall\n\u2022 Reset credentials for all administrative accounts\n\u2022 Scan for and remove scheduled tasks created during the incident window\n\nSHORT-TERM ACTIONS:\n\u2022 Conduct full malware analysis on WORKSTATION-01\n\u2022 Review logs for lateral movement to other systems\n\u2022 Identify and secure data that may have been exfiltrated\n\u2022 Implement multi-factor authentication for all remote access\n\u2022 Enable USB device logging and control policies\n\nLONG-TERM ACTIONS:\n\u2022 Review and strengthen remote access policies\n\u2022 Implement network segmentation to limit lateral movement\n\u2022 Deploy EDR solution for enhanced endpoint visibility\n\u2022 Conduct security awareness training on phishing and social engineering\n\u2022 Implement data loss prevention (DLP) controls\n\u2022 Regular review of privileged account usage\n\nEVIDENCE PRESERVATION:\nAll evidence has been cryptographically hashed and chain of custody maintained.\nFurther analysis may be required to determine the full extent of data compromise.\n        "
+  },
+  "summary": {
+    "total_events": 76,
+    "time_range": {
+      "start": "2026-02-09T08:45:29.872028",
+      "end": "2026-02-09T09:57:10.872028",
+      "duration": "1:11:41"
+    },
+    "severity_breakdown": {
+      "Information": 41,
+      "Warning": 25,
+      "Critical": 8,
+      "High": 2
+    },
+    "source_breakdown": {
+      "Windows Event Log": 34,
+      "Network Traffic": 31,
+      "USB Device Activity": 11
+    },
+    "attack_stages": {
+      "Execution": 7,
+      "Unknown": 19,
+      "Initial Access": 31,
+      "Privilege Escalation": 7,
+      "Persistence": 7,
+      "Exfiltration": 5
+    },
+    "critical_events": [
+      {
+        "timestamp": "2026-02-09T09:22:29.872028",
+        "description": "192.168.1.10 -> 203.0.113.45:443",
+        "severity": "Critical",
+        "attack_stage": "Initial Access"
+      },
+      {
+        "timestamp": "2026-02-09T09:22:59.872028",
+        "description": "192.168.1.10 -> 203.0.113.45:443",
+        "severity": "Critical",
+        "attack_stage": "Initial Access"
+      },
+      {
+        "timestamp": "2026-02-09T09:23:29.872028",
+        "description": "192.168.1.10 -> 203.0.113.45:443",
+        "severity": "Critical",
+        "attack_stage": "Initial Access"
+      },
+      {
+        "timestamp": "2026-02-09T09:23:59.872028",
+        "description": "192.168.1.10 -> 203.0.113.45:443",
+        "severity": "Critical",
+        "attack_stage": "Initial Access"
+      },
+      {
+        "timestamp": "2026-02-09T09:24:29.872028",
+        "description": "192.168.1.10 -> 203.0.113.45:443",
+        "severity": "Critical",
+        "attack_stage": "Initial Access"
+      },
+      {
+        "timestamp": "2026-02-09T09:32:09.872028",
+        "description": "data_transfer - Kingston DataTraveler 3.0",
+        "severity": "Critical",
+        "attack_stage": "Exfiltration"
+      },
+      {
+        "timestamp": "2026-02-09T09:37:29.872028",
+        "description": "connected - Kingston DataTraveler 3.0",
+        "severity": "High",
+        "attack_stage": "Exfiltration"
+      },
+      {
+        "timestamp": "2026-02-09T09:40:49.872028",
+        "description": "data_transfer - Kingston DataTraveler 3.0",
+        "severity": "Critical",
+        "attack_stage": "Exfiltration"
+      },
+      {
+        "timestamp": "2026-02-09T09:42:29.872028",
+        "description": "data_transfer - Kingston DataTraveler 3.0",
+        "severity": "Critical",
+        "attack_stage": "Exfiltration"
+      },
+      {
+        "timestamp": "2026-02-09T09:44:30.872028",
+        "description": "connected - SanDisk Ultra USB 3.0",
+        "severity": "High",
+        "attack_stage": "Exfiltration"
+      }
+    ]
+  },
+  "evidence_manifest": {
+    "./logs/windows_events.json": {
+      "sha256": "66b3dfec284bfe03c19167f521da0a9c480fb3137353a6a38eeadbcadf255be7",
+      "md5": "e4b9380caf77199c71d7c2a6dc9a76e7",
+      "timestamp": "2026-02-09T10:45:29.877143"
+    },
+    "./logs/network_traffic.json": {
+      "sha256": "2f74d2206f27282f95ad390ddf164779c5eee4171e005773d0613a0d3c37de84",
+      "md5": "8fc1245df75720ec8d3e0ba1f8f88456",
+      "timestamp": "2026-02-09T10:45:29.877397"
+    },
+    "./logs/usb_activity.json": {
+      "sha256": "57a4ddc3b1eea1e315f05455073c1313c6e6511520207257dd8e35b6ebaeead1",
+      "md5": "14f7e691fb16c194e36110f2555d8e92",
+      "timestamp": "2026-02-09T10:45:29.877605"
+    }
+  },
+  "timeline": [
+    {
+      "timestamp": "2026-02-09T08:45:29.872028",
+      "event_type": "4688",
+      "source": "Windows Event Log",
+      "severity": "Information",
+      "description": "A new process has been created",
+      "details": {
+        "event_id": "4688",
+        "computer": "WORKSTATION-01",
+        "user": "Administrator",
+        "channel": "Security",
+        "process_id": 2823
+      },
+      "attack_stage": "Execution",
+      "ioc_tags": [
+        "process_execution"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T08:45:29.872028",
+      "event_type": "UDP",
+      "source": "Network Traffic",
+      "severity": "Information",
+      "description": "203.0.113.45 -> 192.168.1.20:21",
+      "details": {
+        "src_ip": "203.0.113.45",
+        "dst_ip": "192.168.1.20",
+        "src_port": 53520,
+        "dst_port": 21,
+        "protocol": "UDP",
+        "bytes": 64358,
+        "action": "allowed"
+      },
+      "attack_stage": "Unknown",
+      "ioc_tags": []
+    },
+    {
+      "timestamp": "2026-02-09T08:47:40.872028",
+      "event_type": "ICMP",
+      "source": "Network Traffic",
+      "severity": "Information",
+      "description": "192.168.1.20 -> 203.0.113.45:443",
+      "details": {
+        "src_ip": "192.168.1.20",
+        "dst_ip": "203.0.113.45",
+        "src_port": 62042,
+        "dst_port": 443,
+        "protocol": "ICMP",
+        "bytes": 13176,
+        "action": "allowed"
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "external_communication"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T08:48:39.872028",
+      "event_type": "ICMP",
+      "source": "Network Traffic",
+      "severity": "Information",
+      "description": "192.168.1.10 -> 185.220.101.50:80",
+      "details": {
+        "src_ip": "192.168.1.10",
+        "dst_ip": "185.220.101.50",
+        "src_port": 58367,
+        "dst_port": 80,
+        "protocol": "ICMP",
+        "bytes": 32652,
+        "action": "allowed"
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "external_communication"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T08:49:33.872028",
+      "event_type": "ICMP",
+      "source": "Network Traffic",
+      "severity": "Information",
+      "description": "192.168.1.20 -> 192.0.2.123:53",
+      "details": {
+        "src_ip": "192.168.1.20",
+        "dst_ip": "192.0.2.123",
+        "src_port": 57652,
+        "dst_port": 53,
+        "protocol": "ICMP",
+        "bytes": 66682,
+        "action": "allowed"
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "external_communication"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T08:50:21.872028",
+      "event_type": "4624",
+      "source": "Windows Event Log",
+      "severity": "Information",
+      "description": "An account was successfully logged on",
+      "details": {
+        "event_id": "4624",
+        "computer": "SERVER-DC01",
+        "user": "Administrator",
+        "channel": "Security",
+        "process_id": 7351
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "authentication"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T08:51:35.872028",
+      "event_type": "UDP",
+      "source": "Network Traffic",
+      "severity": "Warning",
+      "description": "203.0.113.45 -> 192.168.1.20:23",
+      "details": {
+        "src_ip": "203.0.113.45",
+        "dst_ip": "192.168.1.20",
+        "src_port": 55570,
+        "dst_port": 23,
+        "protocol": "UDP",
+        "bytes": 60282,
+        "action": "allowed"
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "remote_access"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T08:52:05.872028",
+      "event_type": "ICMP",
+      "source": "Network Traffic",
+      "severity": "Warning",
+      "description": "198.51.100.89 -> 192.168.1.15:23",
+      "details": {
+        "src_ip": "198.51.100.89",
+        "dst_ip": "192.168.1.15",
+        "src_port": 65112,
+        "dst_port": 23,
+        "protocol": "ICMP",
+        "bytes": 23844,
+        "action": "allowed"
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "remote_access"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T08:53:35.872028",
+      "event_type": "ICMP",
+      "source": "Network Traffic",
+      "severity": "Information",
+      "description": "192.168.1.10 -> 198.51.100.89:53",
+      "details": {
+        "src_ip": "192.168.1.10",
+        "dst_ip": "198.51.100.89",
+        "src_port": 57385,
+        "dst_port": 53,
+        "protocol": "ICMP",
+        "bytes": 55833,
+        "action": "allowed"
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "external_communication"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T08:54:00.872028",
+      "event_type": "ICMP",
+      "source": "Network Traffic",
+      "severity": "Information",
+      "description": "10.0.0.5 -> 198.51.100.89:445",
+      "details": {
+        "src_ip": "10.0.0.5",
+        "dst_ip": "198.51.100.89",
+        "src_port": 58969,
+        "dst_port": 445,
+        "protocol": "ICMP",
+        "bytes": 62760,
+        "action": "allowed"
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "external_communication"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T08:54:20.872028",
+      "event_type": "TCP",
+      "source": "Network Traffic",
+      "severity": "Information",
+      "description": "203.0.113.45 -> 192.168.1.20:80",
+      "details": {
+        "src_ip": "203.0.113.45",
+        "dst_ip": "192.168.1.20",
+        "src_port": 55457,
+        "dst_port": 80,
+        "protocol": "TCP",
+        "bytes": 74486,
+        "action": "allowed"
+      },
+      "attack_stage": "Unknown",
+      "ioc_tags": []
+    },
+    {
+      "timestamp": "2026-02-09T08:55:13.872028",
+      "event_type": "UDP",
+      "source": "Network Traffic",
+      "severity": "Warning",
+      "description": "192.0.2.123 -> 192.168.1.20:22",
+      "details": {
+        "src_ip": "192.0.2.123",
+        "dst_ip": "192.168.1.20",
+        "src_port": 62077,
+        "dst_port": 22,
+        "protocol": "UDP",
+        "bytes": 15089,
+        "action": "allowed"
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "remote_access"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T08:55:16.872028",
+      "event_type": "4634",
+      "source": "Windows Event Log",
+      "severity": "Information",
+      "description": "An account was logged off",
+      "details": {
+        "event_id": "4634",
+        "computer": "LAPTOP-HR02",
+        "user": "ServiceAccount",
+        "channel": "Security",
+        "process_id": 7370
+      },
+      "attack_stage": "Unknown",
+      "ioc_tags": []
+    },
+    {
+      "timestamp": "2026-02-09T08:55:31.872028",
+      "event_type": "UDP",
+      "source": "Network Traffic",
+      "severity": "Information",
+      "description": "192.168.1.10 -> 203.0.113.45:443",
+      "details": {
+        "src_ip": "192.168.1.10",
+        "dst_ip": "203.0.113.45",
+        "src_port": 58829,
+        "dst_port": 443,
+        "protocol": "UDP",
+        "bytes": 55869,
+        "action": "allowed"
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "external_communication"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T08:56:35.872028",
+      "event_type": "ICMP",
+      "source": "Network Traffic",
+      "severity": "Information",
+      "description": "192.168.1.20 -> 198.51.100.89:139",
+      "details": {
+        "src_ip": "192.168.1.20",
+        "dst_ip": "198.51.100.89",
+        "src_port": 56825,
+        "dst_port": 139,
+        "protocol": "ICMP",
+        "bytes": 33522,
+        "action": "allowed"
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "external_communication"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T08:58:56.872028",
+      "event_type": "ICMP",
+      "source": "Network Traffic",
+      "severity": "Information",
+      "description": "185.220.101.50 -> 192.168.1.10:139",
+      "details": {
+        "src_ip": "185.220.101.50",
+        "dst_ip": "192.168.1.10",
+        "src_port": 63131,
+        "dst_port": 139,
+        "protocol": "ICMP",
+        "bytes": 96002,
+        "action": "allowed"
+      },
+      "attack_stage": "Unknown",
+      "ioc_tags": []
+    },
+    {
+      "timestamp": "2026-02-09T08:59:21.872028",
+      "event_type": "TCP",
+      "source": "Network Traffic",
+      "severity": "Information",
+      "description": "203.0.113.45 -> 10.0.0.5:443",
+      "details": {
+        "src_ip": "203.0.113.45",
+        "dst_ip": "10.0.0.5",
+        "src_port": 64352,
+        "dst_port": 443,
+        "protocol": "TCP",
+        "bytes": 54135,
+        "action": "allowed"
+      },
+      "attack_stage": "Unknown",
+      "ioc_tags": []
+    },
+    {
+      "timestamp": "2026-02-09T08:59:34.872028",
+      "event_type": "TCP",
+      "source": "Network Traffic",
+      "severity": "Information",
+      "description": "203.0.113.45 -> 192.168.1.15:445",
+      "details": {
+        "src_ip": "203.0.113.45",
+        "dst_ip": "192.168.1.15",
+        "src_port": 57283,
+        "dst_port": 445,
+        "protocol": "TCP",
+        "bytes": 63610,
+        "action": "allowed"
+      },
+      "attack_stage": "Unknown",
+      "ioc_tags": []
+    },
+    {
+      "timestamp": "2026-02-09T08:59:57.872028",
+      "event_type": "4672",
+      "source": "Windows Event Log",
+      "severity": "Warning",
+      "description": "Special privileges assigned to new logon",
+      "details": {
+        "event_id": "4672",
+        "computer": "SERVER-DC01",
+        "user": "ServiceAccount",
+        "channel": "Security",
+        "process_id": 1630
+      },
+      "attack_stage": "Privilege Escalation",
+      "ioc_tags": [
+        "privilege_escalation"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:00:11.872028",
+      "event_type": "TCP",
+      "source": "Network Traffic",
+      "severity": "Information",
+      "description": "192.168.1.10 -> 198.51.100.89:21",
+      "details": {
+        "src_ip": "192.168.1.10",
+        "dst_ip": "198.51.100.89",
+        "src_port": 65364,
+        "dst_port": 21,
+        "protocol": "TCP",
+        "bytes": 62683,
+        "action": "allowed"
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "external_communication"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:01:00.872028",
+      "event_type": "UDP",
+      "source": "Network Traffic",
+      "severity": "Warning",
+      "description": "198.51.100.89 -> 10.0.0.5:53",
+      "details": {
+        "src_ip": "198.51.100.89",
+        "dst_ip": "10.0.0.5",
+        "src_port": 57900,
+        "dst_port": 53,
+        "protocol": "UDP",
+        "bytes": 75942,
+        "action": "blocked"
+      },
+      "attack_stage": "Unknown",
+      "ioc_tags": [
+        "blocked_attempt"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:01:12.872028",
+      "event_type": "ICMP",
+      "source": "Network Traffic",
+      "severity": "Information",
+      "description": "192.168.1.10 -> 203.0.113.45:21",
+      "details": {
+        "src_ip": "192.168.1.10",
+        "dst_ip": "203.0.113.45",
+        "src_port": 64878,
+        "dst_port": 21,
+        "protocol": "ICMP",
+        "bytes": 12034,
+        "action": "allowed"
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "external_communication"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:01:27.872028",
+      "event_type": "4698",
+      "source": "Windows Event Log",
+      "severity": "Warning",
+      "description": "A scheduled task was created",
+      "details": {
+        "event_id": "4698",
+        "computer": "SERVER-DC01",
+        "user": "attacker@external.com",
+        "channel": "Security",
+        "process_id": 6700
+      },
+      "attack_stage": "Persistence",
+      "ioc_tags": [
+        "persistence"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:03:15.872028",
+      "event_type": "ICMP",
+      "source": "Network Traffic",
+      "severity": "Warning",
+      "description": "10.0.0.5 -> 185.220.101.50:22",
+      "details": {
+        "src_ip": "10.0.0.5",
+        "dst_ip": "185.220.101.50",
+        "src_port": 61951,
+        "dst_port": 22,
+        "protocol": "ICMP",
+        "bytes": 49837,
+        "action": "allowed"
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "remote_access",
+        "external_communication"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:04:52.872028",
+      "event_type": "4698",
+      "source": "Windows Event Log",
+      "severity": "Warning",
+      "description": "A scheduled task was created",
+      "details": {
+        "event_id": "4698",
+        "computer": "WORKSTATION-01",
+        "user": "JohnDoe",
+        "channel": "Security",
+        "process_id": 9360
+      },
+      "attack_stage": "Persistence",
+      "ioc_tags": [
+        "persistence"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:05:29.872028",
+      "event_type": "TCP",
+      "source": "Network Traffic",
+      "severity": "Warning",
+      "description": "198.51.100.89 -> 192.168.1.10:3389",
+      "details": {
+        "src_ip": "198.51.100.89",
+        "dst_ip": "192.168.1.10",
+        "src_port": 52341,
+        "dst_port": 3389,
+        "protocol": "TCP",
+        "bytes": 4567,
+        "action": "allowed"
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "remote_access"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:05:34.872028",
+      "event_type": "4624",
+      "source": "Windows Event Log",
+      "severity": "Information",
+      "description": "An account was successfully logged on",
+      "details": {
+        "event_id": "4624",
+        "computer": "WORKSTATION-01",
+        "user": "attacker@external.com",
+        "channel": "Security",
+        "process_id": 2341
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "authentication"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:05:38.872028",
+      "event_type": "TCP",
+      "source": "Network Traffic",
+      "severity": "Warning",
+      "description": "192.168.1.20 -> 203.0.113.45:22",
+      "details": {
+        "src_ip": "192.168.1.20",
+        "dst_ip": "203.0.113.45",
+        "src_port": 61662,
+        "dst_port": 22,
+        "protocol": "TCP",
+        "bytes": 4006,
+        "action": "allowed"
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "remote_access",
+        "external_communication"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:06:51.872028",
+      "event_type": "TCP",
+      "source": "Network Traffic",
+      "severity": "Warning",
+      "description": "203.0.113.45 -> 10.0.0.5:3389",
+      "details": {
+        "src_ip": "203.0.113.45",
+        "dst_ip": "10.0.0.5",
+        "src_port": 55188,
+        "dst_port": 3389,
+        "protocol": "TCP",
+        "bytes": 51521,
+        "action": "allowed"
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "remote_access"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:07:01.872028",
+      "event_type": "TCP",
+      "source": "Network Traffic",
+      "severity": "Information",
+      "description": "10.0.0.5 -> 192.0.2.123:139",
+      "details": {
+        "src_ip": "10.0.0.5",
+        "dst_ip": "192.0.2.123",
+        "src_port": 56974,
+        "dst_port": 139,
+        "protocol": "TCP",
+        "bytes": 91219,
+        "action": "allowed"
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "external_communication"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:07:10.872028",
+      "event_type": "4624",
+      "source": "Windows Event Log",
+      "severity": "Information",
+      "description": "An account was successfully logged on",
+      "details": {
+        "event_id": "4624",
+        "computer": "WORKSTATION-01",
+        "user": "attacker@external.com",
+        "channel": "Security",
+        "process_id": 3687
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "authentication"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:09:21.872028",
+      "event_type": "ICMP",
+      "source": "Network Traffic",
+      "severity": "Warning",
+      "description": "192.168.1.10 -> 198.51.100.89:22",
+      "details": {
+        "src_ip": "192.168.1.10",
+        "dst_ip": "198.51.100.89",
+        "src_port": 63065,
+        "dst_port": 22,
+        "protocol": "ICMP",
+        "bytes": 2792,
+        "action": "blocked"
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "remote_access",
+        "external_communication"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:10:29.872028",
+      "event_type": "4672",
+      "source": "Windows Event Log",
+      "severity": "Warning",
+      "description": "Special privileges assigned to new logon",
+      "details": {
+        "event_id": "4672",
+        "computer": "WORKSTATION-01",
+        "user": "attacker@external.com",
+        "channel": "Security",
+        "process_id": 2341
+      },
+      "attack_stage": "Privilege Escalation",
+      "ioc_tags": [
+        "privilege_escalation"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:10:47.872028",
+      "event_type": "TCP",
+      "source": "Network Traffic",
+      "severity": "Warning",
+      "description": "192.0.2.123 -> 192.168.1.15:3389",
+      "details": {
+        "src_ip": "192.0.2.123",
+        "dst_ip": "192.168.1.15",
+        "src_port": 51836,
+        "dst_port": 3389,
+        "protocol": "TCP",
+        "bytes": 75031,
+        "action": "allowed"
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "remote_access"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:11:39.872028",
+      "event_type": "4688",
+      "source": "Windows Event Log",
+      "severity": "Information",
+      "description": "A new process has been created",
+      "details": {
+        "event_id": "4688",
+        "computer": "WORKSTATION-01",
+        "user": "JohnDoe",
+        "channel": "Security",
+        "process_id": 7637
+      },
+      "attack_stage": "Execution",
+      "ioc_tags": [
+        "process_execution"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:11:47.872028",
+      "event_type": "4634",
+      "source": "Windows Event Log",
+      "severity": "Information",
+      "description": "An account was logged off",
+      "details": {
+        "event_id": "4634",
+        "computer": "WORKSTATION-01",
+        "user": "ServiceAccount",
+        "channel": "Security",
+        "process_id": 2398
+      },
+      "attack_stage": "Unknown",
+      "ioc_tags": []
+    },
+    {
+      "timestamp": "2026-02-09T09:11:53.872028",
+      "event_type": "UDP",
+      "source": "Network Traffic",
+      "severity": "Warning",
+      "description": "198.51.100.89 -> 192.168.1.20:23",
+      "details": {
+        "src_ip": "198.51.100.89",
+        "dst_ip": "192.168.1.20",
+        "src_port": 62022,
+        "dst_port": 23,
+        "protocol": "UDP",
+        "bytes": 80626,
+        "action": "allowed"
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "remote_access"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:12:29.872028",
+      "event_type": "4698",
+      "source": "Windows Event Log",
+      "severity": "Warning",
+      "description": "A scheduled task was created",
+      "details": {
+        "event_id": "4698",
+        "computer": "WORKSTATION-01",
+        "user": "attacker@external.com",
+        "channel": "Security",
+        "process_id": 3456
+      },
+      "attack_stage": "Persistence",
+      "ioc_tags": [
+        "persistence"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:13:23.872028",
+      "event_type": "4634",
+      "source": "Windows Event Log",
+      "severity": "Information",
+      "description": "An account was logged off",
+      "details": {
+        "event_id": "4634",
+        "computer": "LAPTOP-HR02",
+        "user": "SYSTEM",
+        "channel": "Security",
+        "process_id": 2612
+      },
+      "attack_stage": "Unknown",
+      "ioc_tags": []
+    },
+    {
+      "timestamp": "2026-02-09T09:15:29.872028",
+      "event_type": "disconnected",
+      "source": "USB Device Activity",
+      "severity": "Information",
+      "description": "disconnected - SanDisk Ultra USB 3.0",
+      "details": {
+        "device_id": "USB\\VID_0781&PID_5581",
+        "device_name": "SanDisk Ultra USB 3.0",
+        "serial_number": "CC1122334455",
+        "action": "disconnected",
+        "user": "attacker@external.com",
+        "volume_name": null
+      },
+      "attack_stage": "Unknown",
+      "ioc_tags": []
+    },
+    {
+      "timestamp": "2026-02-09T09:16:21.872028",
+      "event_type": "4698",
+      "source": "Windows Event Log",
+      "severity": "Warning",
+      "description": "A scheduled task was created",
+      "details": {
+        "event_id": "4698",
+        "computer": "SERVER-DC01",
+        "user": "ServiceAccount",
+        "channel": "Security",
+        "process_id": 8072
+      },
+      "attack_stage": "Persistence",
+      "ioc_tags": [
+        "persistence"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:18:53.872028",
+      "event_type": "4634",
+      "source": "Windows Event Log",
+      "severity": "Information",
+      "description": "An account was logged off",
+      "details": {
+        "event_id": "4634",
+        "computer": "WORKSTATION-01",
+        "user": "JohnDoe",
+        "channel": "Security",
+        "process_id": 2887
+      },
+      "attack_stage": "Unknown",
+      "ioc_tags": []
+    },
+    {
+      "timestamp": "2026-02-09T09:19:53.872028",
+      "event_type": "4688",
+      "source": "Windows Event Log",
+      "severity": "Information",
+      "description": "A new process has been created",
+      "details": {
+        "event_id": "4688",
+        "computer": "LAPTOP-HR02",
+        "user": "attacker@external.com",
+        "channel": "Security",
+        "process_id": 9796
+      },
+      "attack_stage": "Execution",
+      "ioc_tags": [
+        "process_execution"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:19:56.872028",
+      "event_type": "disconnected",
+      "source": "USB Device Activity",
+      "severity": "Information",
+      "description": "disconnected - Kingston DataTraveler 3.0",
+      "details": {
+        "device_id": "USB\\VID_0951&PID_1666",
+        "device_name": "Kingston DataTraveler 3.0",
+        "serial_number": "AA0123456789",
+        "action": "disconnected",
+        "user": "Administrator",
+        "volume_name": null
+      },
+      "attack_stage": "Unknown",
+      "ioc_tags": []
+    },
+    {
+      "timestamp": "2026-02-09T09:22:29.872028",
+      "event_type": "TCP",
+      "source": "Network Traffic",
+      "severity": "Critical",
+      "description": "192.168.1.10 -> 203.0.113.45:443",
+      "details": {
+        "src_ip": "192.168.1.10",
+        "dst_ip": "203.0.113.45",
+        "src_port": 52000,
+        "dst_port": 443,
+        "protocol": "TCP",
+        "bytes": 2444703,
+        "action": "allowed"
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "data_exfiltration",
+        "external_communication"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:22:59.872028",
+      "event_type": "TCP",
+      "source": "Network Traffic",
+      "severity": "Critical",
+      "description": "192.168.1.10 -> 203.0.113.45:443",
+      "details": {
+        "src_ip": "192.168.1.10",
+        "dst_ip": "203.0.113.45",
+        "src_port": 52001,
+        "dst_port": 443,
+        "protocol": "TCP",
+        "bytes": 3789922,
+        "action": "allowed"
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "data_exfiltration",
+        "external_communication"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:23:24.872028",
+      "event_type": "4688",
+      "source": "Windows Event Log",
+      "severity": "Information",
+      "description": "A new process has been created",
+      "details": {
+        "event_id": "4688",
+        "computer": "WORKSTATION-01",
+        "user": "JohnDoe",
+        "channel": "Security",
+        "process_id": 4571
+      },
+      "attack_stage": "Execution",
+      "ioc_tags": [
+        "process_execution"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:23:29.872028",
+      "event_type": "TCP",
+      "source": "Network Traffic",
+      "severity": "Critical",
+      "description": "192.168.1.10 -> 203.0.113.45:443",
+      "details": {
+        "src_ip": "192.168.1.10",
+        "dst_ip": "203.0.113.45",
+        "src_port": 52002,
+        "dst_port": 443,
+        "protocol": "TCP",
+        "bytes": 3949404,
+        "action": "allowed"
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "data_exfiltration",
+        "external_communication"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:23:59.872028",
+      "event_type": "TCP",
+      "source": "Network Traffic",
+      "severity": "Critical",
+      "description": "192.168.1.10 -> 203.0.113.45:443",
+      "details": {
+        "src_ip": "192.168.1.10",
+        "dst_ip": "203.0.113.45",
+        "src_port": 52003,
+        "dst_port": 443,
+        "protocol": "TCP",
+        "bytes": 3814753,
+        "action": "allowed"
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "data_exfiltration",
+        "external_communication"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:24:13.872028",
+      "event_type": "disconnected",
+      "source": "USB Device Activity",
+      "severity": "Information",
+      "description": "disconnected - Kingston DataTraveler 3.0",
+      "details": {
+        "device_id": "USB\\VID_0951&PID_1666",
+        "device_name": "Kingston DataTraveler 3.0",
+        "serial_number": "AA0123456789",
+        "action": "disconnected",
+        "user": "Administrator",
+        "volume_name": null
+      },
+      "attack_stage": "Unknown",
+      "ioc_tags": []
+    },
+    {
+      "timestamp": "2026-02-09T09:24:29.872028",
+      "event_type": "TCP",
+      "source": "Network Traffic",
+      "severity": "Critical",
+      "description": "192.168.1.10 -> 203.0.113.45:443",
+      "details": {
+        "src_ip": "192.168.1.10",
+        "dst_ip": "203.0.113.45",
+        "src_port": 52004,
+        "dst_port": 443,
+        "protocol": "TCP",
+        "bytes": 4232218,
+        "action": "allowed"
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "data_exfiltration",
+        "external_communication"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:25:13.872028",
+      "event_type": "4698",
+      "source": "Windows Event Log",
+      "severity": "Warning",
+      "description": "A scheduled task was created",
+      "details": {
+        "event_id": "4698",
+        "computer": "WORKSTATION-01",
+        "user": "SYSTEM",
+        "channel": "Security",
+        "process_id": 3082
+      },
+      "attack_stage": "Persistence",
+      "ioc_tags": [
+        "persistence"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:27:25.872028",
+      "event_type": "4672",
+      "source": "Windows Event Log",
+      "severity": "Warning",
+      "description": "Special privileges assigned to new logon",
+      "details": {
+        "event_id": "4672",
+        "computer": "WORKSTATION-01",
+        "user": "Administrator",
+        "channel": "Security",
+        "process_id": 9655
+      },
+      "attack_stage": "Privilege Escalation",
+      "ioc_tags": [
+        "privilege_escalation"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:30:02.872028",
+      "event_type": "4624",
+      "source": "Windows Event Log",
+      "severity": "Information",
+      "description": "An account was successfully logged on",
+      "details": {
+        "event_id": "4624",
+        "computer": "WORKSTATION-01",
+        "user": "ServiceAccount",
+        "channel": "Security",
+        "process_id": 3783
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "authentication"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:31:12.872028",
+      "event_type": "4698",
+      "source": "Windows Event Log",
+      "severity": "Warning",
+      "description": "A scheduled task was created",
+      "details": {
+        "event_id": "4698",
+        "computer": "LAPTOP-HR02",
+        "user": "attacker@external.com",
+        "channel": "Security",
+        "process_id": 2938
+      },
+      "attack_stage": "Persistence",
+      "ioc_tags": [
+        "persistence"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:31:30.872028",
+      "event_type": "4672",
+      "source": "Windows Event Log",
+      "severity": "Warning",
+      "description": "Special privileges assigned to new logon",
+      "details": {
+        "event_id": "4672",
+        "computer": "LAPTOP-HR02",
+        "user": "attacker@external.com",
+        "channel": "Security",
+        "process_id": 9486
+      },
+      "attack_stage": "Privilege Escalation",
+      "ioc_tags": [
+        "privilege_escalation"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:32:09.872028",
+      "event_type": "data_transfer",
+      "source": "USB Device Activity",
+      "severity": "Critical",
+      "description": "data_transfer - Kingston DataTraveler 3.0",
+      "details": {
+        "device_id": "USB\\VID_0951&PID_1666",
+        "device_name": "Kingston DataTraveler 3.0",
+        "serial_number": "AA0123456789",
+        "action": "data_transfer",
+        "user": "Administrator",
+        "volume_name": "USBDRIVE6"
+      },
+      "attack_stage": "Exfiltration",
+      "ioc_tags": [
+        "data_exfiltration"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:32:46.872028",
+      "event_type": "4672",
+      "source": "Windows Event Log",
+      "severity": "Warning",
+      "description": "Special privileges assigned to new logon",
+      "details": {
+        "event_id": "4672",
+        "computer": "SERVER-DC01",
+        "user": "ServiceAccount",
+        "channel": "Security",
+        "process_id": 3978
+      },
+      "attack_stage": "Privilege Escalation",
+      "ioc_tags": [
+        "privilege_escalation"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:34:45.872028",
+      "event_type": "4698",
+      "source": "Windows Event Log",
+      "severity": "Warning",
+      "description": "A scheduled task was created",
+      "details": {
+        "event_id": "4698",
+        "computer": "LAPTOP-HR02",
+        "user": "attacker@external.com",
+        "channel": "Security",
+        "process_id": 9482
+      },
+      "attack_stage": "Persistence",
+      "ioc_tags": [
+        "persistence"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:37:29.872028",
+      "event_type": "connected",
+      "source": "USB Device Activity",
+      "severity": "High",
+      "description": "connected - Kingston DataTraveler 3.0",
+      "details": {
+        "device_id": "USB\\VID_0951&PID_1666",
+        "device_name": "Kingston DataTraveler 3.0",
+        "serial_number": "AA0123456789",
+        "action": "connected",
+        "user": "attacker@external.com",
+        "volume_name": "USBDRIVE1"
+      },
+      "attack_stage": "Exfiltration",
+      "ioc_tags": [
+        "removable_media",
+        "potential_exfiltration"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:38:37.872028",
+      "event_type": "4672",
+      "source": "Windows Event Log",
+      "severity": "Warning",
+      "description": "Special privileges assigned to new logon",
+      "details": {
+        "event_id": "4672",
+        "computer": "WORKSTATION-01",
+        "user": "JohnDoe",
+        "channel": "Security",
+        "process_id": 8110
+      },
+      "attack_stage": "Privilege Escalation",
+      "ioc_tags": [
+        "privilege_escalation"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:39:53.872028",
+      "event_type": "4688",
+      "source": "Windows Event Log",
+      "severity": "Information",
+      "description": "A new process has been created",
+      "details": {
+        "event_id": "4688",
+        "computer": "SERVER-DC01",
+        "user": "SYSTEM",
+        "channel": "Security",
+        "process_id": 5000
+      },
+      "attack_stage": "Execution",
+      "ioc_tags": [
+        "process_execution"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:39:54.872028",
+      "event_type": "disconnected",
+      "source": "USB Device Activity",
+      "severity": "Information",
+      "description": "disconnected - Kingston DataTraveler 3.0",
+      "details": {
+        "device_id": "USB\\VID_0951&PID_1666",
+        "device_name": "Kingston DataTraveler 3.0",
+        "serial_number": "AA0123456789",
+        "action": "disconnected",
+        "user": "attacker@external.com",
+        "volume_name": null
+      },
+      "attack_stage": "Unknown",
+      "ioc_tags": []
+    },
+    {
+      "timestamp": "2026-02-09T09:40:49.872028",
+      "event_type": "data_transfer",
+      "source": "USB Device Activity",
+      "severity": "Critical",
+      "description": "data_transfer - Kingston DataTraveler 3.0",
+      "details": {
+        "device_id": "USB\\VID_0951&PID_1666",
+        "device_name": "Kingston DataTraveler 3.0",
+        "serial_number": "AA0123456789",
+        "action": "data_transfer",
+        "user": "JohnDoe",
+        "volume_name": "USBDRIVE3"
+      },
+      "attack_stage": "Exfiltration",
+      "ioc_tags": [
+        "data_exfiltration"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:42:29.872028",
+      "event_type": "data_transfer",
+      "source": "USB Device Activity",
+      "severity": "Critical",
+      "description": "data_transfer - Kingston DataTraveler 3.0",
+      "details": {
+        "device_id": "USB\\VID_0951&PID_1666",
+        "device_name": "Kingston DataTraveler 3.0",
+        "serial_number": "AA0123456789",
+        "action": "data_transfer",
+        "user": "attacker@external.com",
+        "volume_name": "USBDRIVE1"
+      },
+      "attack_stage": "Exfiltration",
+      "ioc_tags": [
+        "data_exfiltration"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:42:30.872028",
+      "event_type": "4688",
+      "source": "Windows Event Log",
+      "severity": "Information",
+      "description": "A new process has been created",
+      "details": {
+        "event_id": "4688",
+        "computer": "WORKSTATION-01",
+        "user": "ServiceAccount",
+        "channel": "Security",
+        "process_id": 6826
+      },
+      "attack_stage": "Execution",
+      "ioc_tags": [
+        "process_execution"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:43:28.872028",
+      "event_type": "4624",
+      "source": "Windows Event Log",
+      "severity": "Information",
+      "description": "An account was successfully logged on",
+      "details": {
+        "event_id": "4624",
+        "computer": "SERVER-DC01",
+        "user": "attacker@external.com",
+        "channel": "Security",
+        "process_id": 9190
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "authentication"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:43:45.872028",
+      "event_type": "4624",
+      "source": "Windows Event Log",
+      "severity": "Information",
+      "description": "An account was successfully logged on",
+      "details": {
+        "event_id": "4624",
+        "computer": "LAPTOP-HR02",
+        "user": "JohnDoe",
+        "channel": "Security",
+        "process_id": 8802
+      },
+      "attack_stage": "Initial Access",
+      "ioc_tags": [
+        "authentication"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:44:30.872028",
+      "event_type": "connected",
+      "source": "USB Device Activity",
+      "severity": "High",
+      "description": "connected - SanDisk Ultra USB 3.0",
+      "details": {
+        "device_id": "USB\\VID_0781&PID_5581",
+        "device_name": "SanDisk Ultra USB 3.0",
+        "serial_number": "CC1122334455",
+        "action": "connected",
+        "user": "attacker@external.com",
+        "volume_name": "USBDRIVE5"
+      },
+      "attack_stage": "Exfiltration",
+      "ioc_tags": [
+        "removable_media",
+        "potential_exfiltration"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:45:29.872028",
+      "event_type": "disconnected",
+      "source": "USB Device Activity",
+      "severity": "Information",
+      "description": "disconnected - Kingston DataTraveler 3.0",
+      "details": {
+        "device_id": "USB\\VID_0951&PID_1666",
+        "device_name": "Kingston DataTraveler 3.0",
+        "serial_number": "AA0123456789",
+        "action": "disconnected",
+        "user": "attacker@external.com",
+        "volume_name": null
+      },
+      "attack_stage": "Unknown",
+      "ioc_tags": []
+    },
+    {
+      "timestamp": "2026-02-09T09:47:10.872028",
+      "event_type": "4634",
+      "source": "Windows Event Log",
+      "severity": "Information",
+      "description": "An account was logged off",
+      "details": {
+        "event_id": "4634",
+        "computer": "LAPTOP-HR02",
+        "user": "ServiceAccount",
+        "channel": "Security",
+        "process_id": 7306
+      },
+      "attack_stage": "Unknown",
+      "ioc_tags": []
+    },
+    {
+      "timestamp": "2026-02-09T09:47:58.872028",
+      "event_type": "disconnected",
+      "source": "USB Device Activity",
+      "severity": "Information",
+      "description": "disconnected - SanDisk Ultra USB 3.0",
+      "details": {
+        "device_id": "USB\\VID_0781&PID_5581",
+        "device_name": "SanDisk Ultra USB 3.0",
+        "serial_number": "CC1122334455",
+        "action": "disconnected",
+        "user": "JohnDoe",
+        "volume_name": null
+      },
+      "attack_stage": "Unknown",
+      "ioc_tags": []
+    },
+    {
+      "timestamp": "2026-02-09T09:49:29.872028",
+      "event_type": "4634",
+      "source": "Windows Event Log",
+      "severity": "Information",
+      "description": "An account was logged off",
+      "details": {
+        "event_id": "4634",
+        "computer": "WORKSTATION-01",
+        "user": "attacker@external.com",
+        "channel": "Security",
+        "process_id": 2341
+      },
+      "attack_stage": "Unknown",
+      "ioc_tags": []
+    },
+    {
+      "timestamp": "2026-02-09T09:52:01.872028",
+      "event_type": "4634",
+      "source": "Windows Event Log",
+      "severity": "Information",
+      "description": "An account was logged off",
+      "details": {
+        "event_id": "4634",
+        "computer": "LAPTOP-HR02",
+        "user": "ServiceAccount",
+        "channel": "Security",
+        "process_id": 7299
+      },
+      "attack_stage": "Unknown",
+      "ioc_tags": []
+    },
+    {
+      "timestamp": "2026-02-09T09:54:44.872028",
+      "event_type": "4688",
+      "source": "Windows Event Log",
+      "severity": "Information",
+      "description": "A new process has been created",
+      "details": {
+        "event_id": "4688",
+        "computer": "WORKSTATION-01",
+        "user": "attacker@external.com",
+        "channel": "Security",
+        "process_id": 6382
+      },
+      "attack_stage": "Execution",
+      "ioc_tags": [
+        "process_execution"
+      ]
+    },
+    {
+      "timestamp": "2026-02-09T09:57:10.872028",
+      "event_type": "4672",
+      "source": "Windows Event Log",
+      "severity": "Warning",
+      "description": "Special privileges assigned to new logon",
+      "details": {
+        "event_id": "4672",
+        "computer": "LAPTOP-HR02",
+        "user": "Administrator",
+        "channel": "Security",
+        "process_id": 4067
+      },
+      "attack_stage": "Privilege Escalation",
+      "ioc_tags": [
+        "privilege_escalation"
+      ]
+    }
+  ]
+}

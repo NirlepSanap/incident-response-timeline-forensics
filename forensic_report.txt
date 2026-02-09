@@ -1,0 +1,231 @@
+
+================================================================================
+                    FORENSIC INCIDENT RESPONSE REPORT
+================================================================================
+
+CASE INFORMATION
+--------------------------------------------------------------------------------
+Case ID:              IR-2026-001
+Incident Type:        Suspected Data Exfiltration
+Report Date:          2026-02-09 10:45:29
+Investigator:         Digital Forensics Team
+Organization:         Acme Corporation
+
+EXECUTIVE SUMMARY
+--------------------------------------------------------------------------------
+
+A potential data breach was detected on February 9, 2026, involving unauthorized 
+access to workstation WORKSTATION-01. The incident appears to involve external 
+threat actor gaining remote access, escalating privileges, and exfiltrating 
+sensitive data through both network channels and removable media.
+
+This automated forensic analysis correlates evidence from Windows Event Logs, 
+network traffic captures, and USB device activity to reconstruct the attack 
+timeline and identify the scope of compromise.
+        
+
+Total Events Analyzed: 76
+Time Range: 2026-02-09 08:45:29 to 2026-02-09 09:57:10
+Duration: 1:11:41
+
+EVIDENCE SOURCES
+--------------------------------------------------------------------------------
+
+Source File: ./logs/windows_events.json
+SHA-256:     66b3dfec284bfe03c19167f521da0a9c480fb3137353a6a38eeadbcadf255be7
+MD5:         e4b9380caf77199c71d7c2a6dc9a76e7
+Collected:   2026-02-09T10:45:29.877143
+
+Source File: ./logs/network_traffic.json
+SHA-256:     2f74d2206f27282f95ad390ddf164779c5eee4171e005773d0613a0d3c37de84
+MD5:         8fc1245df75720ec8d3e0ba1f8f88456
+Collected:   2026-02-09T10:45:29.877397
+
+Source File: ./logs/usb_activity.json
+SHA-256:     57a4ddc3b1eea1e315f05455073c1313c6e6511520207257dd8e35b6ebaeead1
+MD5:         14f7e691fb16c194e36110f2555d8e92
+Collected:   2026-02-09T10:45:29.877605
+
+
+ATTACK STAGE ANALYSIS
+--------------------------------------------------------------------------------
+Execution                      :     7 events
+Exfiltration                   :     5 events
+Initial Access                 :    31 events
+Persistence                    :     7 events
+Privilege Escalation           :     7 events
+Unknown                        :    19 events
+
+
+SEVERITY DISTRIBUTION
+--------------------------------------------------------------------------------
+Critical                       :     8 events
+High                           :     2 events
+Information                    :    41 events
+Warning                        :    25 events
+
+
+CRITICAL EVENTS TIMELINE
+--------------------------------------------------------------------------------
+
+[2026-02-09 09:22:29] Critical
+Stage:       Initial Access
+Source:      Network Traffic
+Type:        TCP
+Description: 192.168.1.10 -> 203.0.113.45:443
+IOC Tags:    data_exfiltration, external_communication
+================================================================================
+
+[2026-02-09 09:22:59] Critical
+Stage:       Initial Access
+Source:      Network Traffic
+Type:        TCP
+Description: 192.168.1.10 -> 203.0.113.45:443
+IOC Tags:    data_exfiltration, external_communication
+================================================================================
+
+[2026-02-09 09:23:29] Critical
+Stage:       Initial Access
+Source:      Network Traffic
+Type:        TCP
+Description: 192.168.1.10 -> 203.0.113.45:443
+IOC Tags:    data_exfiltration, external_communication
+================================================================================
+
+[2026-02-09 09:23:59] Critical
+Stage:       Initial Access
+Source:      Network Traffic
+Type:        TCP
+Description: 192.168.1.10 -> 203.0.113.45:443
+IOC Tags:    data_exfiltration, external_communication
+================================================================================
+
+[2026-02-09 09:24:29] Critical
+Stage:       Initial Access
+Source:      Network Traffic
+Type:        TCP
+Description: 192.168.1.10 -> 203.0.113.45:443
+IOC Tags:    data_exfiltration, external_communication
+================================================================================
+
+[2026-02-09 09:32:09] Critical
+Stage:       Exfiltration
+Source:      USB Device Activity
+Type:        data_transfer
+Description: data_transfer - Kingston DataTraveler 3.0
+IOC Tags:    data_exfiltration
+================================================================================
+
+[2026-02-09 09:37:29] High
+Stage:       Exfiltration
+Source:      USB Device Activity
+Type:        connected
+Description: connected - Kingston DataTraveler 3.0
+IOC Tags:    removable_media, potential_exfiltration
+================================================================================
+
+[2026-02-09 09:40:49] Critical
+Stage:       Exfiltration
+Source:      USB Device Activity
+Type:        data_transfer
+Description: data_transfer - Kingston DataTraveler 3.0
+IOC Tags:    data_exfiltration
+================================================================================
+
+[2026-02-09 09:42:29] Critical
+Stage:       Exfiltration
+Source:      USB Device Activity
+Type:        data_transfer
+Description: data_transfer - Kingston DataTraveler 3.0
+IOC Tags:    data_exfiltration
+================================================================================
+
+[2026-02-09 09:44:30] High
+Stage:       Exfiltration
+Source:      USB Device Activity
+Type:        connected
+Description: connected - SanDisk Ultra USB 3.0
+IOC Tags:    removable_media, potential_exfiltration
+================================================================================
+
+
+KEY FINDINGS
+--------------------------------------------------------------------------------
+• 8 potential data exfiltration events detected
+• 7 privilege escalation attempts identified
+• 18 external network communications observed
+• 2 removable media device activities recorded
+
+
+CONCLUSIONS
+--------------------------------------------------------------------------------
+
+CONCLUSIONS AND FINDINGS:
+------------------------
+
+The forensic timeline analysis reveals a coordinated attack with the following 
+key observations:
+
+1. INITIAL ACCESS: External RDP connection from IP 198.51.100.89 to internal 
+   workstation at approximately [TIME]. The connection was successful using 
+   credentials for account "attacker@external.com".
+
+2. PRIVILEGE ESCALATION: Within 5 minutes of initial access, the attacker 
+   obtained elevated privileges (Event ID 4672), indicating either credential 
+   theft or exploitation of a privilege escalation vulnerability.
+
+3. PERSISTENCE MECHANISM: A scheduled task was created (Event ID 4698) to 
+   maintain persistent access to the compromised system.
+
+4. DATA EXFILTRATION - NETWORK: Multiple large data transfers (2-5 MB each) 
+   were observed to external IP 203.0.113.45 over HTTPS (port 443), totaling 
+   approximately 15-20 MB of data.
+
+5. DATA EXFILTRATION - REMOVABLE MEDIA: A Kingston DataTraveler USB device 
+   was connected and used for data transfer approximately 35 minutes after 
+   initial access, representing an additional exfiltration vector.
+
+RECOMMENDATIONS:
+---------------
+
+IMMEDIATE ACTIONS:
+• Isolate WORKSTATION-01 from the network immediately
+• Disable remote access for account "attacker@external.com"
+• Block external IP addresses 198.51.100.89 and 203.0.113.45 at firewall
+• Reset credentials for all administrative accounts
+• Scan for and remove scheduled tasks created during the incident window
+
+SHORT-TERM ACTIONS:
+• Conduct full malware analysis on WORKSTATION-01
+• Review logs for lateral movement to other systems
+• Identify and secure data that may have been exfiltrated
+• Implement multi-factor authentication for all remote access
+• Enable USB device logging and control policies
+
+LONG-TERM ACTIONS:
+• Review and strengthen remote access policies
+• Implement network segmentation to limit lateral movement
+• Deploy EDR solution for enhanced endpoint visibility
+• Conduct security awareness training on phishing and social engineering
+• Implement data loss prevention (DLP) controls
+• Regular review of privileged account usage
+
+EVIDENCE PRESERVATION:
+All evidence has been cryptographically hashed and chain of custody maintained.
+Further analysis may be required to determine the full extent of data compromise.
+        
+
+INVESTIGATOR CERTIFICATION
+--------------------------------------------------------------------------------
+This report represents an accurate and complete analysis of the forensic 
+evidence available at the time of investigation. All evidence has been handled 
+according to digital forensics best practices with cryptographic verification 
+of integrity.
+
+Investigator: Digital Forensics Team
+Date: 2026-02-09 10:45:29
+Signature: _______________________
+
+================================================================================
+                            END OF REPORT
+================================================================================
